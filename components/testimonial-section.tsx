@@ -10,14 +10,14 @@ export function TestimonialSection() {
       location: "San Francisco, CA",
       image: "/placeholder.svg?height=80&width=80",
       rating: 5,
-      text: "RoomMatch helped me find the perfect roommate! The compatibility matching is spot-on, and I felt safe throughout the entire process.",
+      text: "HouseApp helped me find the perfect roommate! The compatibility matching is spot-on, and I felt safe throughout the entire process.",
     },
     {
       name: "David Chen",
       location: "New York, NY",
       image: "/placeholder.svg?height=80&width=80",
       rating: 5,
-      text: "I was skeptical about finding roommates online, but RoomMatch's verification system gave me confidence. Found my roommate in just 2 weeks!",
+      text: "I was skeptical about finding roommates online, but HouseApp's verification system gave me confidence. Found my roommate in just 2 weeks!",
     },
     {
       name: "Maria Rodriguez",
@@ -34,7 +34,7 @@ export function TestimonialSection() {
         <div className="text-center mb-16">
           <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">What Our Users Say</h2>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Join thousands of happy roommates who found their perfect match through RoomMatch.
+            Join thousands of happy roommates who found their perfect match through HouseApp.
           </p>
         </div>
 

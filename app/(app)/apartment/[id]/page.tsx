@@ -79,8 +79,8 @@ interface Apartment {
   bedrooms: number
   bathrooms: number
   sqft: number
-  images: string[] // Legacy support
-  media: MediaItem[] // New media gallery
+  images: string[]
+  media: MediaItem[]
   amenities: string[]
   available: string
   description: string
@@ -100,6 +100,74 @@ interface Apartment {
   walkScore?: number
   liked: boolean
   status: "available" | "pending" | "rented"
+}
+
+interface Review {
+  id: string
+  userId: string
+  userName: string
+  userAvatar: string
+  rating: number
+  comment: string
+  date: string
+  verified: boolean
+  reviewType: "tenant" | "visitor" | "roommate"
+}
+
+// Mock reviews data
+const mockReviews: { [key: string]: Review[] } = {
+  "1": [
+    {
+      id: "r1",
+      userId: "u1",
+      userName: "Sarah Chen",
+      userAvatar: "/placeholder.svg?height=40&width=40",
+      rating: 5,
+      comment:
+        "Amazing apartment! The location is perfect and Maria was incredibly helpful throughout the entire process. The building amenities are top-notch.",
+      date: "2024-02-15",
+      verified: true,
+      reviewType: "tenant",
+    },
+    {
+      id: "r2",
+      userId: "u2",
+      userName: "Mike Johnson",
+      userAvatar: "/placeholder.svg?height=40&width=40",
+      rating: 4,
+      comment:
+        "Great space with lots of natural light. The only downside is street parking can be challenging, but overall very satisfied.",
+      date: "2024-01-28",
+      verified: true,
+      reviewType: "tenant",
+    },
+    {
+      id: "r3",
+      userId: "u3",
+      userName: "Emily Rodriguez",
+      userAvatar: "/placeholder.svg?height=40&width=40",
+      rating: 5,
+      comment:
+        "Lived here for 8 months and loved every minute. The property manager is responsive and the neighborhood is vibrant.",
+      date: "2024-01-10",
+      verified: true,
+      reviewType: "tenant",
+    },
+  ],
+  "2": [
+    {
+      id: "r4",
+      userId: "u4",
+      userName: "David Kim",
+      userAvatar: "/placeholder.svg?height=40&width=40",
+      rating: 5,
+      comment:
+        "Luxury living at its finest. The building amenities are incredible and the concierge service is excellent.",
+      date: "2024-02-20",
+      verified: true,
+      reviewType: "tenant",
+    },
+  ],
 }
 
 // Mock current user profile
@@ -142,7 +210,7 @@ const managerMapping: { [key: string]: Manager } = {
     phone: "(415) 555-0789",
     rating: 4.7,
     totalReviews: 156,
-    isAgent: false, // Self-managing owner
+    isAgent: false,
   },
   "manager-4": {
     id: "manager-4",
@@ -152,7 +220,7 @@ const managerMapping: { [key: string]: Manager } = {
     phone: "(415) 555-0321",
     rating: 4.6,
     totalReviews: 98,
-    isAgent: false, // Self-managing owner
+    isAgent: false,
   },
 }
 
@@ -316,7 +384,7 @@ const mockApartments: { [key: string]: Apartment } = {
       bio: "Software engineer looking to sublet my apartment while I travel for work. Clean, responsible tenant preferred.",
     },
     manager_id: "manager-3",
-    owner_id: "manager-3", // Same as manager (self-managing)
+    owner_id: "owner-3",
     address: "789 Castro Street, San Francisco, CA 94114",
     neighborhood: "Castro District",
     yearBuilt: 1995,
@@ -358,7 +426,7 @@ const mockApartments: { [key: string]: Apartment } = {
       bio: "Moving to New York for a new job opportunity. Looking for responsible tenants to take over my lease.",
     },
     manager_id: "manager-4",
-    owner_id: "manager-4", // Same as manager (self-managing)
+    owner_id: "owner-4",
     address: "456 24th Street, San Francisco, CA 94131",
     neighborhood: "Noe Valley",
     yearBuilt: 1985,
@@ -421,12 +489,22 @@ export default function ApartmentDetailPage() {
   const isMobile = useMediaQuery("(max-width: 768px)")
   const prefersReducedMotion = useMediaQuery("(prefers-reduced-motion: reduce)")
 
+  const [showReviewForm, setShowReviewForm] = useState(false)
+  const [newReview, setNewReview] = useState({
+    rating: 5,
+    comment: "",
+    reviewType: "tenant" as "tenant" | "visitor" | "roommate",
+  })
+
   const apartmentId = params.id as string
+  const [reviews, setReviews] = useState<Review[]>(mockReviews[apartmentId] || [])
+
   const apartment = mockApartments[apartmentId]
-  const currentMedia = apartment?.media?.[currentMediaIndex] || {
-    type: "photo",
-    url: apartment?.images?.[currentMediaIndex] || "/placeholder.svg",
-  }
+  const currentMedia =
+    apartment?.media?.[currentMediaIndex] || {
+      type: "photo",
+      url: apartment?.images?.[currentMediaIndex] || "/placeholder.svg",
+    }
   const totalMediaCount = apartment?.media?.length || apartment?.images?.length || 0
 
   useEffect(() => {
@@ -517,7 +595,7 @@ export default function ApartmentDetailPage() {
     }
   }
 
-  const getStatusBadgeColor = (status: string) => {
+  const getStatusBadgeColor = (status: Apartment["status"]) => {
     switch (status) {
       case "available":
         return "bg-green-500"
@@ -530,14 +608,18 @@ export default function ApartmentDetailPage() {
     }
   }
 
+  // Guard against undefined apartment when computing manager
+  const manager = apartment ? managerMapping[apartment.manager_id] : undefined
+
   const handleStartChat = () => {
-    const manager = managerMapping[apartment.manager_id]
-    const contactName = manager?.name
+    if (!manager) return
+    const contactName = manager.name
     showToastNotification("Opening chat...")
-    router.push(`/chats?contact=${contactName}`)
+    router.push(`/chats?contact=${encodeURIComponent(contactName)}`)
   }
 
   const handleShare = async () => {
+    if (!apartment) return
     if (navigator.share) {
       try {
         await navigator.share({
@@ -560,17 +642,43 @@ export default function ApartmentDetailPage() {
   }
 
   const handleViewProfile = () => {
-    const manager = managerMapping[apartment.manager_id]
-    if (manager) {
-      if (manager.isAgent) {
-        router.push(`/agent-profile/${manager.name.toLowerCase().replace(/\s+/g, "-")}`)
-      } else {
-        router.push(`/user-profile/${manager.name.toLowerCase().replace(/\s+/g, "-")}`)
-      }
+    if (!manager) return
+    const slug = manager.name.toLowerCase().replace(/\s+/g, "-")
+    if (manager.isAgent) {
+      router.push(`/agent-profile/${slug}`)
+    } else {
+      router.push(`/user-profile/${slug}`)
     }
   }
 
-  const manager = managerMapping[apartment.manager_id]
+  const handleSubmitReview = () => {
+    if (newReview.comment.trim().length < 10) {
+      showToastNotification("Please write a review with at least 10 characters")
+      return
+    }
+
+    const review: Review = {
+      id: `r${Date.now()}`,
+      userId: "current-user",
+      userName: mockCurrentUser.name,
+      userAvatar: mockCurrentUser.avatar,
+      rating: newReview.rating,
+      comment: newReview.comment.trim(),
+      date: new Date().toISOString().split("T")[0],
+      verified: mockCurrentUser.verified,
+      reviewType: newReview.reviewType,
+    }
+
+    setReviews([review, ...reviews])
+    setNewReview({ rating: 5, comment: "", reviewType: "tenant" })
+    setShowReviewForm(false)
+    showToastNotification("Review submitted successfully!")
+  }
+
+  const averageRating =
+    reviews.length > 0
+      ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+      : manager?.rating || 0
 
   if (isLoading) {
     return (
@@ -653,7 +761,7 @@ export default function ApartmentDetailPage() {
                 <img
                   src={currentMedia.url || "/placeholder.svg"}
                   alt={
-                    currentMedia.title || `${apartment.title} - Image ${currentMediaIndex + 1} of ${totalMediaCount}`
+                    currentMedia.title || `${apartment!.title} - Image ${currentMediaIndex + 1} of ${totalMediaCount}`
                   }
                   className="w-full h-full object-cover transition-opacity duration-300"
                   onLoad={() => handleMediaLoad(currentMediaIndex)}
@@ -666,7 +774,7 @@ export default function ApartmentDetailPage() {
                   <video
                     ref={videoRef}
                     src={currentMedia.url}
-                    poster={currentMedia.thumbnail}
+                    poster={(currentMedia as MediaItem).thumbnail}
                     className="w-full h-full object-cover"
                     onLoadedData={() => handleMediaLoad(currentMediaIndex)}
                     onPlay={() => setIsVideoPlaying(true)}
@@ -719,12 +827,12 @@ export default function ApartmentDetailPage() {
             {/* Price and Status - Pinned top-right */}
             <div className="absolute top-4 right-4 flex flex-col items-end space-y-2 animate-in fade-in slide-in-from-right-4 duration-700">
               <Badge
-                className={`${getStatusBadgeColor(apartment.status)} text-white font-semibold px-3 py-1 shadow-lg capitalize`}
+                className={`${getStatusBadgeColor(apartment!.status)} text-white font-semibold px-3 py-1 shadow-lg capitalize`}
               >
-                {apartment.status}
+                {apartment!.status}
               </Badge>
               <Badge className="bg-green-500 text-white font-bold text-lg sm:text-xl px-4 py-2 shadow-lg">
-                ${apartment.price.toLocaleString()}/mo
+                ${apartment!.price.toLocaleString()}/mo
               </Badge>
             </div>
 
@@ -762,7 +870,7 @@ export default function ApartmentDetailPage() {
                   role="tablist"
                   aria-label="Media gallery"
                 >
-                  {apartment.media?.map((_, index) => (
+                  {Array.from({ length: totalMediaCount }).map((_, index) => (
                     <button
                       key={index}
                       onClick={() => setCurrentMediaIndex(index)}
@@ -789,38 +897,40 @@ export default function ApartmentDetailPage() {
           </div>
 
           {/* Desktop thumbnail strip */}
-          {isDesktop && apartment.media && apartment.media.length > 1 && (
+          {isDesktop && totalMediaCount > 1 && (
             <div className="p-4 bg-gray-50 dark:bg-gray-800">
               <div className="flex space-x-3 overflow-x-auto pb-2">
-                {apartment.media.map((media, index) => (
-                  <button
-                    key={media.id}
-                    onClick={() => setCurrentMediaIndex(index)}
-                    className={`relative flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden transition-all duration-200 hover:scale-105 ${
-                      index === currentMediaIndex
-                        ? "ring-2 ring-blue-500 shadow-lg"
-                        : "hover:ring-2 hover:ring-gray-300"
-                    }`}
-                    aria-label={`View ${media.title || `media ${index + 1}`}`}
-                  >
-                    <img
-                      src={media.thumbnail || media.url}
-                      alt={media.title || `Thumbnail ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                    {media.type === "video" && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                        <Play size={16} className="text-white" />
-                      </div>
-                    )}
-                    {media.type === "360" && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                        <RotateCcw size={16} className="text-white" />
-                      </div>
-                    )}
-                    {index === currentMediaIndex && <div className="absolute inset-0 bg-blue-500/20" />}
-                  </button>
-                ))}
+                {(apartment!.media.length ? apartment!.media : apartment!.images.map((url, i) => ({ id: `${i}`, type: "photo" as const, url }))).map(
+                  (media: any, index: number) => (
+                    <button
+                      key={media.id ?? index}
+                      onClick={() => setCurrentMediaIndex(index)}
+                      className={`relative flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden transition-all duration-200 hover:scale-105 ${
+                        index === currentMediaIndex
+                          ? "ring-2 ring-blue-500 shadow-lg"
+                          : "hover:ring-2 hover:ring-gray-300"
+                      }`}
+                      aria-label={`View ${media.title || `media ${index + 1}`}`}
+                    >
+                      <img
+                        src={media.thumbnail || media.url}
+                        alt={media.title || `Thumbnail ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                      {media.type === "video" && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                          <Play size={16} className="text-white" />
+                        </div>
+                      )}
+                      {media.type === "360" && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                          <RotateCcw size={16} className="text-white" />
+                        </div>
+                      )}
+                      {index === currentMediaIndex && <div className="absolute inset-0 bg-blue-500/20" />}
+                    </button>
+                  )
+                )}
               </div>
             </div>
           )}
@@ -828,40 +938,39 @@ export default function ApartmentDetailPage() {
 
         {/* Main Content */}
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Property Header */}
             <Card className="p-4 sm:p-6 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-0 shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100">
               <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
                 <div className="mb-4 md:mb-0">
-                  <h1 className="text-2xl sm:text-3xl font-bold mb-2 leading-tight">{apartment.title}</h1>
+                  <h1 className="text-2xl sm:text-3xl font-bold mb-2 leading-tight">{apartment!.title}</h1>
                   <div className="flex items-center text-gray-600 dark:text-gray-400 mb-3">
                     <MapPin size={18} className="mr-2 flex-shrink-0" />
-                    <span className="text-sm sm:text-base">{apartment.address}</span>
+                    <span className="text-sm sm:text-base">{apartment!.address}</span>
                   </div>
                   <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-3 sm:gap-4 text-sm">
                     <div className="flex items-center hover:scale-105 transition-transform duration-200">
                       <BedDouble size={16} className="mr-1 text-blue-500" />
-                      <span className="font-medium">{apartment.bedrooms || "Studio"}</span>
+                      <span className="font-medium">{apartment!.bedrooms || "Studio"}</span>
                     </div>
                     <div className="flex items-center hover:scale-105 transition-transform duration-200">
                       <Bath size={16} className="mr-1 text-green-500" />
-                      <span className="font-medium">{apartment.bathrooms} bath</span>
+                      <span className="font-medium">{apartment!.bathrooms} bath</span>
                     </div>
                     <div className="flex items-center hover:scale-105 transition-transform duration-200">
                       <Square size={16} className="mr-1 text-purple-500" />
-                      <span className="font-medium">{apartment.sqft} sqft</span>
+                      <span className="font-medium">{apartment!.sqft} sqft</span>
                     </div>
                     <div className="flex items-center hover:scale-105 transition-transform duration-200">
                       <Calendar size={16} className="mr-1 text-orange-500" />
-                      <span className="font-medium">Available {apartment.available}</span>
+                      <span className="font-medium">Available {apartment!.available}</span>
                     </div>
                   </div>
                 </div>
               </div>
 
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm sm:text-base">
-                {apartment.description}
+                {apartment!.description}
               </p>
             </Card>
 
@@ -872,7 +981,7 @@ export default function ApartmentDetailPage() {
                 Amenities & Features
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {apartment.amenities.map((amenity, index) => (
+                {apartment!.amenities.map((amenity, index) => (
                   <div
                     key={index}
                     className="flex items-center p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200 hover:scale-105"
@@ -891,37 +1000,37 @@ export default function ApartmentDetailPage() {
                 <div className="space-y-4">
                   <div className="hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors duration-200">
                     <span className="text-sm font-medium text-gray-500">Neighborhood</span>
-                    <p className="font-medium">{apartment.neighborhood}</p>
+                    <p className="font-medium">{apartment!.neighborhood}</p>
                   </div>
-                  {apartment.yearBuilt && (
+                  {apartment!.yearBuilt && (
                     <div className="hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors duration-200">
                       <span className="text-sm font-medium text-gray-500">Year Built</span>
-                      <p className="font-medium">{apartment.yearBuilt}</p>
+                      <p className="font-medium">{apartment!.yearBuilt}</p>
                     </div>
                   )}
                   <div className="hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors duration-200">
                     <span className="text-sm font-medium text-gray-500">Pet Policy</span>
-                    <p className="font-medium">{apartment.petPolicy}</p>
+                    <p className="font-medium">{apartment!.petPolicy}</p>
                   </div>
                   <div className="hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors duration-200">
                     <span className="text-sm font-medium text-gray-500">Parking</span>
                     <p className="font-medium">
-                      {apartment.parkingSpaces > 0 ? `${apartment.parkingSpaces} space(s)` : "No parking"}
+                      {apartment!.parkingSpaces > 0 ? `${apartment!.parkingSpaces} space(s)` : "No parking"}
                     </p>
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  {apartment.walkScore && (
+                  {apartment!.walkScore && (
                     <div className="hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors duration-200">
                       <span className="text-sm font-medium text-gray-500">Walk Score</span>
-                      <p className="font-medium">{apartment.walkScore}/100</p>
+                      <p className="font-medium">{apartment!.walkScore}/100</p>
                     </div>
                   )}
                   <div className="hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors duration-200">
                     <span className="text-sm font-medium text-gray-500">Lease Terms</span>
                     <div className="space-y-1">
-                      {apartment.leaseTerms.map((term, index) => (
+                      {apartment!.leaseTerms.map((term, index) => (
                         <p key={index} className="text-sm">
                           {term}
                         </p>
@@ -930,7 +1039,7 @@ export default function ApartmentDetailPage() {
                   </div>
                   <div className="hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors duration-200">
                     <span className="text-sm font-medium text-gray-500">Utilities Included</span>
-                    <p className="font-medium">{apartment.utilities.join(", ")}</p>
+                    <p className="font-medium">{apartment!.utilities.join(", ")}</p>
                   </div>
                 </div>
               </div>
@@ -940,7 +1049,7 @@ export default function ApartmentDetailPage() {
             <Card className="p-4 sm:p-6 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-0 shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-500 delay-400 hover:shadow-xl transition-shadow duration-300">
               <h2 className="text-lg sm:text-xl font-semibold mb-4">Transportation</h2>
               <div className="flex flex-wrap gap-2">
-                {apartment.nearbyTransport.map((transport, index) => (
+                {apartment!.nearbyTransport.map((transport, index) => (
                   <Badge
                     key={index}
                     variant="secondary"
@@ -951,11 +1060,174 @@ export default function ApartmentDetailPage() {
                 ))}
               </div>
             </Card>
+
+            {/* Reviews Section */}
+            <Card className="p-4 sm:p-6 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-0 shadow-lg animate-in fade-in slide-in-from-bottom-4 duration-500 delay-500 hover:shadow-xl transition-shadow duration-300">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-lg sm:text-xl font-semibold flex items-center">
+                    <Star size={20} className="mr-2 text-yellow-500" />
+                    Reviews & Ratings
+                  </h2>
+                  <div className="flex items-center mt-2">
+                    <div className="flex items-center mr-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          size={16}
+                          className={`${i < Math.floor(averageRating) ? "text-yellow-500 fill-current" : "text-gray-300"}`}
+                        />
+                      ))}
+                      <span className="ml-2 font-semibold">{averageRating.toFixed(1)}</span>
+                    </div>
+                    <span className="text-sm text-gray-500">({reviews.length} reviews)</span>
+                  </div>
+                </div>
+                <Button
+                  onClick={() => setShowReviewForm(!showReviewForm)}
+                  className="bg-blue-500 hover:bg-blue-600 text-white min-h-[44px]"
+                >
+                  Write Review
+                </Button>
+              </div>
+
+              {showReviewForm && (
+                <Card className="p-4 mb-6 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                  <h3 className="font-semibold mb-4">Write a Review</h3>
+
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium mb-2">Rating</label>
+                    <div className="flex items-center space-x-1">
+                      {[1, 2, 3, 4, 5].map((rating) => (
+                        <button
+                          key={rating}
+                          onClick={() => setNewReview({ ...newReview, rating })}
+                          className="p-1 hover:scale-110 transition-transform duration-200"
+                          aria-label={`Rate ${rating} stars`}
+                        >
+                          <Star
+                            size={24}
+                            className={`${rating <= newReview.rating ? "text-yellow-500 fill-current" : "text-gray-300"}`}
+                          />
+                        </button>
+                      ))}
+                      <span className="ml-2 text-sm text-gray-600">
+                        {newReview.rating} star{newReview.rating !== 1 ? "s" : ""}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium mb-2">Review Type</label>
+                    <div className="flex space-x-2">
+                      {[
+                        { value: "tenant", label: "Current/Former Tenant" },
+                        { value: "visitor", label: "Visited Property" },
+                        { value: "roommate", label: "Roommate Experience" },
+                      ].map((type) => (
+                        <button
+                          key={type.value}
+                          onClick={() => setNewReview({ ...newReview, reviewType: type.value as any })}
+                          className={`px-3 py-1 rounded-full text-sm transition-colors duration-200 ${
+                            newReview.reviewType === type.value
+                              ? "bg-blue-500 text-white"
+                              : "bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+                          }`}
+                        >
+                          {type.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium mb-2">Your Review</label>
+                    <textarea
+                      value={newReview.comment}
+                      onChange={(e) => setNewReview({ ...newReview, comment: e.target.value })}
+                      placeholder="Share your experience with this property..."
+                      className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                      rows={4}
+                      maxLength={500}
+                    />
+                    <div className="text-xs text-gray-500 mt-1">
+                      {newReview.comment.length}/500 characters (minimum 10)
+                    </div>
+                  </div>
+
+                  <div className="flex space-x-3">
+                    <Button
+                      onClick={handleSubmitReview}
+                      className="bg-green-500 hover:bg-green-600 text-white"
+                      disabled={newReview.comment.trim().length < 10}
+                    >
+                      Submit Review
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setShowReviewForm(false)
+                        setNewReview({ rating: 5, comment: "", reviewType: "tenant" })
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </Card>
+              )}
+
+              <div className="space-y-4">
+                {reviews.length === 0 ? (
+                  <div className="text-center py-8 text-gray-500">
+                    <Star size={48} className="mx-auto mb-4 text-gray-300" />
+                    <p>No reviews yet. Be the first to review this property!</p>
+                  </div>
+                ) : (
+                  reviews.map((review) => (
+                    <Card key={review.id} className="p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                      <div className="flex items-start space-x-3">
+                        <img
+                          src={review.userAvatar || "/placeholder.svg"}
+                          alt={`${review.userName} profile`}
+                          className="w-10 h-10 rounded-full flex-shrink-0"
+                        />
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center space-x-2">
+                              <h4 className="font-semibold text-sm">{review.userName}</h4>
+                              {review.verified && (
+                                <Badge className="bg-green-500 text-white text-xs px-2 py-0.5">Verified</Badge>
+                              )}
+                              <Badge variant="outline" className="text-xs px-2 py-0.5 capitalize">
+                                {review.reviewType}
+                              </Badge>
+                            </div>
+                            <span className="text-xs text-gray-500">{review.date}</span>
+                          </div>
+
+                          <div className="flex items-center mb-2">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                size={14}
+                                className={`${i < review.rating ? "text-yellow-500 fill-current" : "text-gray-300"}`}
+                              />
+                            ))}
+                            <span className="ml-2 text-sm font-medium">{review.rating}/5</span>
+                          </div>
+
+                          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{review.comment}</p>
+                        </div>
+                      </div>
+                    </Card>
+                  ))
+                )}
+              </div>
+            </Card>
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Contact Info */}
             <Card className="p-4 sm:p-6 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-0 shadow-lg animate-in fade-in slide-in-from-right-4 duration-500 delay-100 hover:shadow-xl transition-shadow duration-300">
               <h2 className="text-lg sm:text-xl font-semibold mb-4">Contact Property Manager</h2>
 
@@ -1016,26 +1288,24 @@ export default function ApartmentDetailPage() {
               )}
             </Card>
 
-            {/* Find Roommate Section */}
             <Card className="p-4 sm:p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-0 shadow-lg animate-in fade-in slide-in-from-right-4 duration-500 delay-200 hover:shadow-xl transition-shadow duration-300">
               <h2 className="text-lg sm:text-xl font-semibold mb-3 flex items-center">
                 <User size={20} className="mr-2 text-blue-500" />
                 Looking for a Roommate?
               </h2>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                {apartment.bedrooms >= 2
-                  ? `Share this ${apartment.bedrooms}-bedroom apartment and split the costs! Your profile will be added to the roommate feed.`
+                {apartment!.bedrooms >= 2
+                  ? `Share this ${apartment!.bedrooms}-bedroom apartment and split the costs! Your profile will be added to the roommate feed.`
                   : `Even studios and 1-bedrooms can work with the right roommate setup. Find someone to share costs and space!`}
               </p>
               <div className="space-y-3">
-                <FindRoommateDialog apartment={apartment} userProfile={mockCurrentUser} />
+                <FindRoommateDialog apartment={apartment!} userProfile={mockCurrentUser} />
                 <div className="text-xs text-gray-500 text-center">
-                  Split rent: ~${Math.round(apartment.price / 2).toLocaleString()}/month each
+                  Split rent: ~${Math.round(apartment!.price / 2).toLocaleString()}/month each
                 </div>
               </div>
             </Card>
 
-            {/* Quick Actions */}
             <Card className="p-4 sm:p-6 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-0 shadow-lg animate-in fade-in slide-in-from-right-4 duration-500 delay-300 hover:shadow-xl transition-shadow duration-300">
               <h2 className="text-lg sm:text-xl font-semibold mb-4">Quick Actions</h2>
               <div className="space-y-3">

@@ -24,7 +24,7 @@ export function DesktopSidebar({ activeTab }: DesktopSidebarProps) {
       <div className="p-6 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center">
           <Heart className="h-8 w-8 text-purple-600 mr-2" />
-          <span className="text-xl font-bold">RoomMatch</span>
+          <span className="text-xl font-bold">HouseApp</span>
         </div>
       </div>
 

@@ -7,10 +7,10 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "RoomMatch - Find Your Perfect Roommate",
+  title: "HouseApp - Find Your Perfect Home & Roommates",
   description:
-    "Connect with compatible roommates through our smart matching system. Find your ideal living situation with confidence.",
-    generator: 'v0.app'
+    "Discover your ideal home and connect with compatible roommates through our smart platform. Find, match, and manage with confidence.",
+  generator: "v0.app",
 }
 
 export default function RootLayout({

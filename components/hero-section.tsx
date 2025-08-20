@@ -22,21 +22,22 @@ export function HeroSection({ onStartMatching }: HeroSectionProps) {
           <div className="flex items-center justify-center mb-8">
             <Heart className="h-12 w-12 text-purple-600 mr-3" />
             <h1 className="text-4xl lg:text-6xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              RoomMatch
+              HouseApp
             </h1>
           </div>
 
           {/* Main headline */}
           <h2 className="text-3xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-            Find Your Perfect
+            Discover Your Perfect
             <span className="block bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Roommate Match
+              Home & Community
             </span>
           </h2>
 
           {/* Subtitle */}
           <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-3xl mx-auto">
-            Swipe. Match. Move in with confidence. Connect with verified roommates who share your lifestyle and budget.
+            Find your ideal home, connect with amazing roommates, and build lasting friendships in your perfect living
+            space.
           </p>
 
           {/* CTA Button */}

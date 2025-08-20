@@ -23,12 +23,12 @@ export function Header() {
           <div className="mr-4 flex items-center">
             <a href="/" className="flex items-center space-x-2">
               <Heart className="h-6 w-6 text-purple-600" />
-              <span className="font-bold">RoomMatch</span>
+              <span className="font-bold">HouseApp</span>
             </a>
           </div>
         )}
 
-        <div className="flex items-center justify-end space-x-2 lg:flex-1">
+        <div className="flex items-center space-x-2 ml-auto">
           {isLoading ? (
             <div className="w-24 h-6 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse" />
           ) : user ? (

@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { Link } from "next/link"
+import Link from "next/link"
 import {
   MapPin,
   Briefcase,
@@ -43,6 +43,7 @@ interface UserProfile {
   occupation: string
   education: string
   interests: string[]
+  lifestyleTags: string[]
   lifestyle: {
     cleanliness: number
     socialLevel: number
@@ -67,6 +68,33 @@ interface UserProfile {
   }
 }
 
+const lifestyleTags = [
+  "Clean & Organized",
+  "Social & Outgoing",
+  "Quiet & Studious",
+  "Early Bird",
+  "Night Owl",
+  "Fitness Enthusiast",
+  "Foodie",
+  "Pet Lover",
+  "Non-Smoker",
+  "420 Friendly",
+  "LGBTQ+ Friendly",
+  "Professional",
+  "Student",
+  "Remote Worker",
+  "Minimalist",
+  "Plant Parent",
+  "Music Lover",
+  "Gamer",
+  "Outdoor Enthusiast",
+  "Homebody",
+  "Party-Friendly",
+  "Eco-Conscious",
+  "Tech Savvy",
+  "Artist/Creative",
+]
+
 const mockProfile: UserProfile = {
   id: "current_user",
   name: "Alex Thompson",
@@ -77,6 +105,7 @@ const mockProfile: UserProfile = {
   occupation: "Senior Software Engineer at Google",
   education: "Stanford University - Computer Science",
   interests: ["Technology", "Hiking", "Photography", "Cooking", "Travel", "Music", "Fitness"],
+  lifestyleTags: ["Tech Savvy", "Professional", "Clean & Organized", "Fitness Enthusiast", "Non-Smoker"],
   lifestyle: {
     cleanliness: 8,
     socialLevel: 7,
@@ -389,6 +418,28 @@ export function ProfileTab() {
                       </div>
                     </div>
 
+                    {/* Lifestyle Tags */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold">Lifestyle Tags</h3>
+                      <div>
+                        <Label htmlFor="lifestyleTags">Lifestyle Tags (comma-separated)</Label>
+                        <Input
+                          id="lifestyleTags"
+                          value={editForm.lifestyleTags.join(", ")}
+                          onChange={(e) =>
+                            updateEditForm(
+                              "lifestyleTags",
+                              e.target.value.split(", ").filter((i) => i.trim()),
+                            )
+                          }
+                          placeholder="e.g., Clean & Organized, Tech Savvy, Professional"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                          Choose from: {lifestyleTags.slice(0, 5).join(", ")}, and more...
+                        </p>
+                      </div>
+                    </div>
+
                     {/* Action Buttons */}
                     <div className="flex justify-end space-x-2 pt-4 border-t">
                       <Button variant="outline" onClick={handleCancelEdit}>
@@ -517,6 +568,21 @@ export function ProfileTab() {
                 {profile.interests.map((interest) => (
                   <Badge key={interest} variant="secondary">
                     {interest}
+                  </Badge>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Lifestyle Tags</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-2">
+                {profile.lifestyleTags.map((tag) => (
+                  <Badge key={tag} className="bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300">
+                    {tag}
                   </Badge>
                 ))}
               </div>

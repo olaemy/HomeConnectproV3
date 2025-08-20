@@ -11,10 +11,11 @@ export function Footer() {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
               <Heart className="h-8 w-8 text-purple-400 mr-2" />
-              <span className="text-2xl font-bold">RoomMatch</span>
+              <span className="text-2xl font-bold">HouseApp</span>
             </div>
             <p className="text-gray-300 mb-6 max-w-md">
-              Find your perfect roommate with confidence. Safe, verified, and designed for modern living.
+              Discover your perfect home and connect with amazing roommates. Safe, verified, and designed for modern
+              living.
             </p>
             <div className="flex space-x-4">
               <Facebook className="h-6 w-6 text-gray-400 hover:text-white cursor-pointer transition-colors" />
@@ -80,7 +81,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-          <p className="text-gray-400">© 2024 RoomMatch. All rights reserved. Made with ❤️ for better living.</p>
+          <p className="text-gray-400">© 2024 HouseApp. All rights reserved. Made with ❤️ for better living.</p>
         </div>
       </div>
     </footer>

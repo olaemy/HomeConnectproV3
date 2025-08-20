@@ -13,6 +13,7 @@ import { MatchingAlgorithm } from "@/lib/matching-algorithm"
 import { SafetySystem } from "@/lib/safety-system"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { useSafeMode } from "@/contexts/safe-mode"
+import { Badge } from "@/components/ui/badge"
 
 interface Roommate {
   id: string
@@ -30,6 +31,7 @@ interface Roommate {
     lifestyle: string
   }
   interests: string[]
+  lifestyleTags: string[]
   verified: boolean
   verificationLevel: "unverified" | "basic" | "verified" | "premium"
   trustScore: number
@@ -88,6 +90,7 @@ const mockRoommates: Roommate[] = [
       lifestyle: "Quiet",
     },
     interests: ["Cooking", "Yoga", "Reading", "Hiking"],
+    lifestyleTags: ["Clean & Organized", "Quiet & Studious", "Pet Lover", "Non-Smoker", "Student"],
     verified: true,
     verificationLevel: "verified",
     trustScore: 92,
@@ -112,6 +115,7 @@ const mockRoommates: Roommate[] = [
       lifestyle: "Social",
     },
     interests: ["Gaming", "Music", "Tech", "Coffee"],
+    lifestyleTags: ["Tech Savvy", "Social & Outgoing", "Professional", "Remote Worker", "Gamer"],
     verified: true,
     verificationLevel: "premium",
     trustScore: 88,
@@ -159,6 +163,7 @@ export function RoommatesTab() {
   const [filteredRoommates, setFilteredRoommates] = useState<Roommate[]>([])
   const scrollRef = useRef<HTMLDivElement>(null)
   const isDesktop = useMediaQuery("(min-width: 1024px)")
+  const [showSafeModeNotification, setShowSafeModeNotification] = useState(true)
 
   useEffect(() => {
     const filtered = mockRoommates.filter((roommate) => {
@@ -167,6 +172,19 @@ export function RoommatesTab() {
     })
     setFilteredRoommates(filtered)
     setCurrentIndex(0)
+  }, [safeMode])
+
+  useEffect(() => {
+    if (showSafeModeNotification) {
+      const timer = setTimeout(() => {
+        setShowSafeModeNotification(false)
+      }, 5000) // Hide after 5 seconds
+      return () => clearTimeout(timer)
+    }
+  }, [showSafeModeNotification])
+
+  useEffect(() => {
+    setShowSafeModeNotification(true)
   }, [safeMode])
 
   const currentRoommate = filteredRoommates[currentIndex]
@@ -241,7 +259,6 @@ export function RoommatesTab() {
   if (filteredRoommates.length === 0) {
     return (
       <div className="h-full flex flex-col p-4">
-        <SafeModeToggle enabled={safeMode} />
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="text-center">
             <Shield size={48} className="mx-auto mb-4 text-gray-400" />
@@ -300,6 +317,39 @@ export function RoommatesTab() {
               </div>
               <div className="p-4">
                 <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2 mb-3">{roommate.bio}</p>
+                <div className="space-y-2 mb-3">
+                  {roommate.interests.length > 0 && (
+                    <div className="flex flex-wrap gap-1">
+                      {roommate.interests.slice(0, 3).map((interest) => (
+                        <Badge key={interest} variant="secondary" className="text-xs">
+                          {interest}
+                        </Badge>
+                      ))}
+                      {roommate.interests.length > 3 && (
+                        <Badge variant="secondary" className="text-xs">
+                          +{roommate.interests.length - 3}
+                        </Badge>
+                      )}
+                    </div>
+                  )}
+                  {roommate.lifestyleTags.length > 0 && (
+                    <div className="flex flex-wrap gap-1">
+                      {roommate.lifestyleTags.slice(0, 2).map((tag) => (
+                        <Badge
+                          key={tag}
+                          className="bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 text-xs"
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                      {roommate.lifestyleTags.length > 2 && (
+                        <Badge className="bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 text-xs">
+                          +{roommate.lifestyleTags.length - 2}
+                        </Badge>
+                      )}
+                    </div>
+                  )}
+                </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="font-semibold text-green-600">
                     ${roommate.budget[0]}-${roommate.budget[1]}
@@ -316,10 +366,33 @@ export function RoommatesTab() {
 
   // Mobile View
   return (
-    <div className="h-full overflow-hidden">
-      <div className="p-4 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200/20">
-        <SafeModeToggle enabled={safeMode} />
-      </div>
+    <div className="h-full overflow-hidden relative">
+      <AnimatePresence>
+        {showSafeModeNotification && (
+          <motion.div
+            initial={{ opacity: 0, y: -50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -50, scale: 0.9 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="absolute top-4 left-4 right-4 z-20 bg-white/20 dark:bg-gray-900/20 backdrop-blur-md border border-white/30 dark:border-gray-700/30 rounded-2xl p-3 shadow-lg"
+            onClick={() => setShowSafeModeNotification(false)}
+          >
+            <div className="flex items-center justify-between">
+              <SafeModeToggle enabled={safeMode} />
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setShowSafeModeNotification(false)
+                }}
+                className="ml-2 p-1 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
+              >
+                <X size={16} className="text-gray-600 dark:text-gray-300" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div ref={scrollRef} className="h-full snap-y snap-mandatory overflow-y-auto scrollbar-hide">
         <AnimatePresence mode="wait">
           <motion.div
@@ -365,6 +438,35 @@ export function RoommatesTab() {
                 </div>
               )}
               <p className="text-gray-700 dark:text-gray-300 mb-4">{currentRoommate.bio}</p>
+              <div className="space-y-3 mb-4">
+                {currentRoommate.interests.length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Interests</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {currentRoommate.interests.map((interest) => (
+                        <Badge key={interest} variant="secondary" className="text-xs">
+                          {interest}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {currentRoommate.lifestyleTags.length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Lifestyle</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {currentRoommate.lifestyleTags.map((tag) => (
+                        <Badge
+                          key={tag}
+                          className="bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 text-xs"
+                        >
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
               <div className="flex space-x-3 mt-6">
                 <Button variant="outline" size="lg" className="flex-1 bg-transparent">
                   <X size={20} className="mr-2" /> Pass

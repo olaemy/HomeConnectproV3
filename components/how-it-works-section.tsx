@@ -30,7 +30,7 @@ export function HowItWorksSection() {
     <section className="py-20 bg-white dark:bg-gray-900">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">How RoomMatch Works</h2>
+          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4">How HouseApp Works</h2>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Finding your perfect roommate has never been easier. Follow these simple steps to get started.
           </p>

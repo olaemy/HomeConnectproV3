@@ -43,6 +43,7 @@ interface Roommate {
     workSchedule: string
   }
   interests: string[]
+  lifestyleTags: string[]
   verified: boolean
   verificationLevel: "unverified" | "basic" | "verified" | "premium"
   trustScore: number
@@ -76,6 +77,7 @@ const mockRoommates: { [key: string]: Roommate } = {
       workSchedule: "Day shift (9-5)",
     },
     interests: ["Cooking", "Yoga", "Reading", "Hiking", "Photography", "Meditation"],
+    lifestyleTags: ["Clean & Organized", "Quiet & Studious", "Pet Lover", "Non-Smoker", "Student", "Early Bird"],
     verified: true,
     verificationLevel: "verified",
     trustScore: 92,
@@ -107,6 +109,7 @@ const mockRoommates: { [key: string]: Roommate } = {
       workSchedule: "Flexible (remote work)",
     },
     interests: ["Gaming", "Music Production", "Tech", "Coffee", "Food", "Movies"],
+    lifestyleTags: ["Tech Savvy", "Social & Outgoing", "Professional", "Remote Worker", "Gamer", "Night Owl"],
     verified: true,
     verificationLevel: "premium",
     trustScore: 88,
@@ -482,6 +485,21 @@ export default function RoommateDetailPage() {
                 className="bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300 px-3 py-1"
               >
                 {interest}
+              </Badge>
+            ))}
+          </div>
+        </Card>
+
+        {/* Lifestyle Tags */}
+        <Card className="p-6 bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm border-0 shadow-lg">
+          <h2 className="text-xl font-semibold mb-4 flex items-center">
+            <User size={20} className="mr-2 text-blue-500" />
+            Lifestyle Tags
+          </h2>
+          <div className="flex flex-wrap gap-2">
+            {roommate.lifestyleTags.map((tag, index) => (
+              <Badge key={index} className="bg-gradient-to-r from-purple-500 to-pink-600 text-white px-3 py-1">
+                {tag}
               </Badge>
             ))}
           </div>
