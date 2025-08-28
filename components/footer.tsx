@@ -1,6 +1,7 @@
 "use client"
 
-import { Heart, Facebook, Twitter, Instagram, Mail } from "lucide-react"
+import { Facebook, Twitter, Instagram, Mail } from "lucide-react"
+import { CityLogo } from "@/components/ui/city-logo"
 
 export function Footer() {
   return (
@@ -10,7 +11,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
-              <Heart className="h-8 w-8 text-purple-400 mr-2" />
+              <CityLogo className="text-purple-400 mr-2" size={32} />
               <span className="text-2xl font-bold">HouseApp</span>
             </div>
             <p className="text-gray-300 mb-6 max-w-md">

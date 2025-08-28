@@ -1,7 +1,7 @@
 "use client"
 
-import { Heart, Megaphone, Clock } from "lucide-react"
-
+import { Megaphone, Clock } from "lucide-react"
+import { CityLogo } from "@/components/ui/city-logo"
 import { useAuth } from "@/hooks/use-auth"
 import { Button } from "@/components/ui/button"
 import { HeaderSafeModeToggle } from "@/components/safety/header-safe-mode-toggle"
@@ -22,7 +22,7 @@ export function Header() {
         ) : (
           <div className="mr-4 flex items-center">
             <a href="/" className="flex items-center space-x-2">
-              <Heart className="h-6 w-6 text-purple-600" />
+              <CityLogo className="text-purple-600" size={24} />
               <span className="font-bold">HouseApp</span>
             </a>
           </div>

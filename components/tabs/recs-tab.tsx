@@ -135,7 +135,7 @@ export function RecsTab() {
   return (
     <div className="h-full flex flex-col max-w-5xl mx-auto">
       {/* Header */}
-      <div className="p-4 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200/20 dark:border-gray-800/20">
+      <div className="sticky top-0 z-10 p-4 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200/20 dark:border-gray-800/20">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">Recommendations</h2>
           <Button variant="ghost" size="sm">

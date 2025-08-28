@@ -270,8 +270,7 @@ export function ApartmentsTab() {
 
   return (
     <div className="h-full flex flex-col">
-      {/* Header with Search and Filters */}
-      <div className="p-4 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200/20">
+      <div className="sticky top-0 z-10 p-4 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200/20">
         <div className="space-y-4">
           <div className="flex items-center space-x-3">
             <div className="relative flex-1">
@@ -317,7 +316,6 @@ export function ApartmentsTab() {
         </div>
       </div>
 
-      {/* Apartments Grid */}
       <div className="flex-1 overflow-y-auto p-4">
         {apartments.length === 0 ? (
           <div className="flex items-center justify-center h-full">

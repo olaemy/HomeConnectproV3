@@ -1,7 +1,8 @@
 "use client"
 
-import { Heart, Star, Users, Shield } from "lucide-react"
+import { Star, Users, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { CityLogo } from "@/components/ui/city-logo"
 
 interface HeroSectionProps {
   onStartMatching: () => void
@@ -20,7 +21,7 @@ export function HeroSection({ onStartMatching }: HeroSectionProps) {
         <div className="text-center max-w-4xl mx-auto">
           {/* Logo and brand */}
           <div className="flex items-center justify-center mb-8">
-            <Heart className="h-12 w-12 text-purple-600 mr-3" />
+            <CityLogo className="text-purple-600 mr-3" size={48} />
             <h1 className="text-4xl lg:text-6xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               HouseApp
             </h1>
@@ -62,7 +63,7 @@ export function HeroSection({ onStartMatching }: HeroSectionProps) {
             </div>
             <div className="text-center">
               <div className="flex items-center justify-center mb-2">
-                <Heart className="h-8 w-8 text-pink-600" />
+                <CityLogo className="text-pink-600" size={32} />
               </div>
               <div className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">25K+</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">Successful Matches</div>

@@ -1,8 +1,9 @@
 "use client"
 
 import Link from "next/link"
-import { Heart, Home, Plus, MessageCircle, User, Settings, Building } from "lucide-react"
+import { Heart, Home, Plus, MessageCircle, User, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { CityLogo } from "@/components/ui/city-logo"
 
 interface DesktopSidebarProps {
   activeTab: string
@@ -12,7 +13,7 @@ export function DesktopSidebar({ activeTab }: DesktopSidebarProps) {
   const navigation = [
     { id: "home", href: "/discover", label: "Discover", icon: Home },
     { id: "add", href: "/add", label: "Add Listing", icon: Plus },
-    { id: "properties", href: "/my-properties", label: "My Properties", icon: Building },
+    { id: "properties", href: "/my-properties", label: "My Properties", icon: null },
     { id: "recs", href: "/recommendations", label: "Recommendations", icon: Heart },
     { id: "chats", href: "/chats", label: "Messages", icon: MessageCircle },
     { id: "profile", href: "/profile", label: "Profile", icon: User },
@@ -23,7 +24,7 @@ export function DesktopSidebar({ activeTab }: DesktopSidebarProps) {
       {/* Logo */}
       <div className="p-6 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center">
-          <Heart className="h-8 w-8 text-purple-600 mr-2" />
+          <CityLogo className="text-purple-600 mr-2" size={32} />
           <span className="text-xl font-bold">HouseApp</span>
         </div>
       </div>
@@ -34,7 +35,7 @@ export function DesktopSidebar({ activeTab }: DesktopSidebarProps) {
           {navigation.map((item) => (
             <Link key={item.id} href={item.href}>
               <Button variant={activeTab === item.id ? "default" : "ghost"} className="w-full justify-start">
-                <item.icon className="mr-3 h-4 w-4" />
+                {item.icon && <item.icon className="mr-3 h-4 w-4" />}
                 {item.label}
               </Button>
             </Link>

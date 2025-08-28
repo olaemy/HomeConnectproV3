@@ -280,10 +280,10 @@ export function RoommatesTab() {
   if (isDesktop) {
     return (
       <div className="h-full flex flex-col">
-        <div className="p-4 border-b">
+        <div className="sticky top-0 z-10 p-4 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200/20">
           <SafeModeToggle enabled={safeMode} />
         </div>
-        <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="flex-1 overflow-y-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredRoommates.map((roommate) => (
             <motion.div
               key={roommate.id}
