@@ -41,6 +41,9 @@ import {
   CheckCircle,
   CalendarIcon,
   Calendar,
+  ChevronRight,
+  Phone,
+  Mail,
 } from "lucide-react"
 
 // Dummy data for tenants
@@ -401,114 +404,125 @@ export default function MyPropertiesPage() {
 
   return (
     <TooltipProvider>
-      <div className="container mx-auto p-4 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold">My Properties</h1>
-            <p className="text-gray-600 dark:text-gray-400">Manage your properties and tenants</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button onClick={() => setShowBroadcastModal(true)} className="hidden sm:flex items-center gap-2">
-              <Megaphone className="w-4 h-4" />
-              Broadcast Message
-            </Button>
-            <Button>
-              <Plus className="w-4 h-4 mr-2" />
-              Add New Property
-            </Button>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 overflow-y-auto scroll-ios pb-[96px] pb-safe">
+        <div className="sticky top-0 z-10 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200/20 p-4 sm:p-6">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h1 className="text-xl sm:text-2xl font-bold">My Properties</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Manage your properties and tenants</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={() => setShowBroadcastModal(true)}
+                className="hidden sm:flex items-center gap-2"
+                size="sm"
+              >
+                <Megaphone className="w-4 h-4" />
+                Broadcast
+              </Button>
+              <Button size="sm" className="flex-1 sm:flex-none">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Property
+              </Button>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Properties</CardTitle>
-              <Building2 className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{properties.length}</div>
-              <p className="text-xs text-muted-foreground">{activeProperties.length} active</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Tenants</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{activeTenants.length}</div>
-              <p className="text-xs text-muted-foreground">+1 from last month</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">$4,000</div>
-              <p className="text-xs text-muted-foreground">+8% from last month</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Occupancy Rate</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">100%</div>
-              <p className="text-xs text-muted-foreground">All units occupied</p>
-            </CardContent>
-          </Card>
-        </div>
+        <div className="p-4 sm:p-6 space-y-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <Card className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">Properties</p>
+                  <p className="text-lg sm:text-2xl font-bold">{properties.length}</p>
+                  <p className="text-xs text-green-600">{activeProperties.length} active</p>
+                </div>
+                <Building2 className="h-6 w-6 sm:h-8 sm:w-8 text-blue-500" />
+              </div>
+            </Card>
+            <Card className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">Tenants</p>
+                  <p className="text-lg sm:text-2xl font-bold">{activeTenants.length}</p>
+                  <p className="text-xs text-green-600">+1 this month</p>
+                </div>
+                <Users className="h-6 w-6 sm:h-8 sm:w-8 text-green-500" />
+              </div>
+            </Card>
+            <Card className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">Revenue</p>
+                  <p className="text-lg sm:text-2xl font-bold">$4.0k</p>
+                  <p className="text-xs text-green-600">+8% this month</p>
+                </div>
+                <DollarSign className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-500" />
+              </div>
+            </Card>
+            <Card className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">Occupancy</p>
+                  <p className="text-lg sm:text-2xl font-bold">100%</p>
+                  <p className="text-xs text-green-600">All occupied</p>
+                </div>
+                <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-purple-500" />
+              </div>
+            </Card>
+          </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="properties">Properties</TabsTrigger>
-            <TabsTrigger value="tenants">Tenants</TabsTrigger>
-            <TabsTrigger value="reminders">Reminders</TabsTrigger>
-          </TabsList>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+            <div className="sticky top-[120px] z-30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm -mx-4 px-4 py-2 border-b border-gray-200/20">
+              <TabsList className="grid w-full grid-cols-3 h-12">
+                <TabsTrigger value="properties" className="text-xs sm:text-sm">
+                  Properties
+                </TabsTrigger>
+                <TabsTrigger value="tenants" className="text-xs sm:text-sm">
+                  Tenants
+                </TabsTrigger>
+                <TabsTrigger value="reminders" className="text-xs sm:text-sm">
+                  Reminders
+                </TabsTrigger>
+              </TabsList>
+            </div>
 
-          <TabsContent value="properties" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {properties.map((property) => (
-                <Card
-                  key={property.id}
-                  className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
-                  onClick={() => handlePropertyClick(property.id)}
-                >
-                  <div className="aspect-video bg-gray-200 dark:bg-gray-800 relative">
-                    <img
-                      src={property.image || "/placeholder.svg"}
-                      alt={property.title}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute top-2 left-2">
-                      <Badge
-                        variant={property.status === "active" ? "default" : "secondary"}
-                        className={property.status === "active" ? "bg-green-500" : ""}
-                      >
-                        {property.status}
-                      </Badge>
-                    </div>
-                    <div className="absolute top-2 right-2">
-                      <Badge variant="outline" className="bg-white/90">
-                        {property.type === "apartment" ? "Apartment" : "Roommate"}
-                      </Badge>
-                    </div>
-                  </div>
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle className="text-lg line-clamp-2">{property.title}</CardTitle>
-                        <CardDescription className="flex items-center gap-1">
-                          <MapPin className="w-3 h-3" />
-                          {property.location}
-                        </CardDescription>
+            <TabsContent value="properties" className="mt-6">
+              <div className="space-y-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 sm:space-y-0">
+                {properties.map((property) => (
+                  <Card
+                    key={property.id}
+                    className="overflow-hidden hover:shadow-lg transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                    onClick={() => handlePropertyClick(property.id)}
+                  >
+                    <div className="relative">
+                      <div className="aspect-[4/3] bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700">
+                        <img
+                          src={property.image || "/placeholder.svg"}
+                          alt={property.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="absolute top-3 left-3 flex gap-2">
+                        <Badge
+                          className={
+                            property.status === "active" ? "bg-green-500 text-white" : "bg-gray-500 text-white"
+                          }
+                        >
+                          {property.status}
+                        </Badge>
+                        <Badge variant="outline" className="bg-white/90">
+                          {property.type === "apartment" ? "Apartment" : "Roommate"}
+                        </Badge>
                       </div>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="absolute top-3 right-3 h-8 w-8 bg-white/90 hover:bg-white"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <MoreVertical className="w-4 h-4" />
                           </Button>
                         </DropdownMenuTrigger>
@@ -524,352 +538,378 @@ export default function MyPropertiesPage() {
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-4">
-                      <span className="flex items-center gap-1">
-                        <Bed className="w-3 h-3" />
-                        {property.bedrooms} bed
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Bath className="w-3 h-3" />
-                        {property.bathrooms} bath
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Square className="w-3 h-3" />
-                        {property.sqft} sqft
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="text-lg font-semibold">{property.price}</div>
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                        <span className="text-sm">{property.rating}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
-                        <Eye className="w-3 h-3" />
-                        {property.views} views
-                      </span>
-                      <span className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
-                        <MessageSquare className="w-3 h-3" />
-                        {property.inquiries} inquiries
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1 text-xs text-gray-500 mt-2">
-                      <Calendar className="w-3 h-3" />
-                      Posted {new Date(property.postedDate).toLocaleDateString()}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
 
-          <TabsContent value="tenants" className="space-y-6">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Active Tenants</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {activeTenants.map((tenant) => (
-                  <Card key={tenant.id}>
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-3 mb-3">
-                        <Avatar>
-                          <AvatarImage src={tenant.avatar || "/placeholder.svg"} alt={tenant.name} />
-                          <AvatarFallback>
-                            {tenant.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <h4 className="font-medium">{tenant.name}</h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">{tenant.unit}</p>
-                        </div>
-                        <Badge
-                          variant="secondary"
-                          className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                        >
-                          {tenant.status}
-                        </Badge>
+                    <div className="p-4 space-y-3">
+                      <div>
+                        <h3 className="font-semibold text-base sm:text-lg line-clamp-2">{property.title}</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                          <MapPin className="w-3 h-3" />
+                          {property.location}
+                        </p>
                       </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">Rent:</span>
-                          <span className="font-medium">${tenant.rentAmount}/mo</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">Lease:</span>
-                          <span>
-                            {tenant.leaseStart} - {tenant.leaseEnd}
+
+                      <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-3">
+                          <span className="flex items-center gap-1">
+                            <Bed className="w-3 h-3" />
+                            {property.bedrooms}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Bath className="w-3 h-3" />
+                            {property.bathrooms}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Square className="w-3 h-3" />
+                            {property.sqft}
                           </span>
                         </div>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          <span className="font-medium">{property.rating}</span>
+                        </div>
                       </div>
-                    </CardContent>
+
+                      <div className="flex items-center justify-between">
+                        <div className="text-lg font-bold text-green-600">{property.price}</div>
+                        <ChevronRight className="w-5 h-5 text-gray-400" />
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t">
+                        <span className="flex items-center gap-1">
+                          <Eye className="w-3 h-3" />
+                          {property.views} views
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <MessageSquare className="w-3 h-3" />
+                          {property.inquiries} inquiries
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          {new Date(property.postedDate).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </span>
+                      </div>
+                    </div>
                   </Card>
                 ))}
               </div>
-            </div>
+            </TabsContent>
 
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold">Pending Invites</h3>
-                <Button size="sm" onClick={() => setShowInviteModal(true)}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Generate Invite Link
-                </Button>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {pendingInvites.map((invite) => (
-                  <Card key={invite.id}>
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="font-mono text-sm bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
-                          {invite.code}
-                        </div>
-                        <Badge variant="outline" className="text-orange-600 border-orange-200">
-                          {invite.status}
-                        </Badge>
-                      </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">Created:</span>
-                          <span>{invite.createdAt}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">Expires in:</span>
-                          <span className="text-orange-600">{invite.expiresAt}</span>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="reminders" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Create Reminder</CardTitle>
-                <CardDescription>Set up reminders for rent, maintenance, or custom tasks</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleReminderSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="reminder-type">Type *</Label>
-                      <Select
-                        value={reminderForm.type}
-                        onValueChange={(value) => setReminderForm({ ...reminderForm, type: value })}
-                      >
-                        <SelectTrigger className={reminderErrors.type ? "border-red-500" : ""}>
-                          <SelectValue placeholder="Select reminder type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Rent">Rent</SelectItem>
-                          <SelectItem value="Maintenance">Maintenance</SelectItem>
-                          <SelectItem value="Custom">Custom</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {reminderErrors.type && <p className="text-sm text-red-500">{reminderErrors.type}</p>}
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="reminder-description">Description *</Label>
-                      <Input
-                        id="reminder-description"
-                        value={reminderForm.description}
-                        onChange={(e) => setReminderForm({ ...reminderForm, description: e.target.value })}
-                        placeholder="Enter reminder description"
-                        className={reminderErrors.description ? "border-red-500" : ""}
-                      />
-                      {reminderErrors.description && (
-                        <p className="text-sm text-red-500">{reminderErrors.description}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <Label>Schedule</Label>
-                    <RadioGroup
-                      value={reminderForm.scheduleType}
-                      onValueChange={(value) => setReminderForm({ ...reminderForm, scheduleType: value })}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="single" id="single" />
-                        <Label htmlFor="single">Single date</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="monthly" id="monthly" />
-                        <Label htmlFor="monthly">Monthly on specific day</Label>
-                      </div>
-                    </RadioGroup>
-
-                    {reminderForm.scheduleType === "single" && (
-                      <div className="space-y-2">
-                        <Input
-                          type="date"
-                          value={reminderForm.singleDate}
-                          onChange={(e) => setReminderForm({ ...reminderForm, singleDate: e.target.value })}
-                          className={reminderErrors.singleDate ? "border-red-500" : ""}
-                        />
-                        {reminderErrors.singleDate && (
-                          <p className="text-sm text-red-500">{reminderErrors.singleDate}</p>
-                        )}
-                      </div>
-                    )}
-
-                    {reminderForm.scheduleType === "monthly" && (
-                      <div className="space-y-2">
-                        <Select
-                          value={reminderForm.monthlyDay}
-                          onValueChange={(value) => setReminderForm({ ...reminderForm, monthlyDay: value })}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select day of month" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {Array.from({ length: 28 }, (_, i) => i + 1).map((day) => (
-                              <SelectItem key={day} value={day.toString()}>
-                                Day {day}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="space-y-3">
-                    <Label>Scope</Label>
-                    <RadioGroup
-                      value={reminderForm.scope}
-                      onValueChange={(value) => setReminderForm({ ...reminderForm, scope: value, specificTenants: [] })}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="all" id="all-tenants" />
-                        <Label htmlFor="all-tenants">All tenants of this property</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="specific" id="specific-tenants" />
-                        <Label htmlFor="specific-tenants">Specific tenants</Label>
-                      </div>
-                    </RadioGroup>
-
-                    {reminderForm.scope === "specific" && (
-                      <div className="space-y-2">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                          {dummyTenants.map((tenant) => (
-                            <div key={tenant.id} className="flex items-center space-x-2">
-                              <Checkbox
-                                id={`tenant-${tenant.id}`}
-                                checked={reminderForm.specificTenants.includes(tenant.id)}
-                                onCheckedChange={() => handleTenantToggle(tenant.id)}
-                              />
-                              <Label htmlFor={`tenant-${tenant.id}`} className="text-sm">
-                                {tenant.name}
-                              </Label>
-                            </div>
-                          ))}
-                        </div>
-                        {reminderErrors.specificTenants && (
-                          <p className="text-sm text-red-500">{reminderErrors.specificTenants}</p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="flex justify-end">
-                    <Button type="submit">Create Reminder</Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Upcoming Reminders</CardTitle>
-                <CardDescription>View and manage your scheduled reminders</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {reminders.map((reminder) => (
-                    <div key={reminder.id} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className="flex-shrink-0">
-                          <Badge
-                            variant="outline"
-                            className={
-                              reminder.type === "rent"
-                                ? "bg-blue-50 text-blue-700 border-blue-200"
-                                : reminder.type === "maintenance"
-                                  ? "bg-orange-50 text-orange-700 border-orange-200"
-                                  : "bg-gray-50 text-gray-700 border-gray-200"
-                            }
-                          >
-                            {reminder.type}
+            <TabsContent value="tenants" className="mt-6 space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Active Tenants</h3>
+                <div className="space-y-3 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 sm:space-y-0">
+                  {activeTenants.map((tenant) => (
+                    <Card key={tenant.id} className="hover:shadow-md transition-shadow">
+                      <div className="p-4">
+                        <div className="flex items-center gap-3 mb-4">
+                          <Avatar className="h-12 w-12">
+                            <AvatarImage src={tenant.avatar || "/placeholder.svg"} alt={tenant.name} />
+                            <AvatarFallback className="bg-blue-100 text-blue-600">
+                              {tenant.name
+                                .split(" ")
+                                .map((n) => n[0])
+                                .join("")}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-semibold truncate">{tenant.name}</h4>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">{tenant.unit}</p>
+                          </div>
+                          <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                            {tenant.status}
                           </Badge>
                         </div>
-                        <div className="flex-1">
-                          <h4 className="font-medium">{reminder.description}</h4>
-                          <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mt-1">
-                            <span className="flex items-center gap-1">
-                              <CalendarIcon className="w-3 h-3" />
-                              {reminder.dueDate}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <User className="w-3 h-3" />
-                              {reminder.scope}
+
+                        <div className="space-y-2 mb-4">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-gray-600 dark:text-gray-400">Monthly Rent</span>
+                            <span className="font-semibold text-green-600">${tenant.rentAmount}</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-gray-600 dark:text-gray-400">Lease Period</span>
+                            <span className="text-sm">
+                              {tenant.leaseStart} - {tenant.leaseEnd}
                             </span>
                           </div>
                         </div>
-                        <Badge
-                          variant="outline"
-                          className={
-                            reminder.priority === "high"
-                              ? "bg-red-50 text-red-700 border-red-200"
-                              : reminder.priority === "medium"
-                                ? "bg-yellow-50 text-yellow-700 border-yellow-200"
-                                : "bg-green-50 text-green-700 border-green-200"
-                          }
-                        >
-                          {reminder.priority}
-                        </Badge>
-                      </div>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm">
-                            <MoreVertical className="w-4 h-4" />
+
+                        <div className="flex gap-2">
+                          <Button size="sm" variant="outline" className="flex-1 bg-transparent">
+                            <Phone className="w-3 h-3 mr-1" />
+                            Call
                           </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Edit className="w-4 h-4 mr-2" />
-                            Edit
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <CheckCircle className="w-4 h-4 mr-2" />
-                            Mark Complete
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="text-red-600">
-                            <Trash2 className="w-4 h-4 mr-2" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
+                          <Button size="sm" variant="outline" className="flex-1 bg-transparent">
+                            <Mail className="w-3 h-3 mr-1" />
+                            Message
+                          </Button>
+                        </div>
+                      </div>
+                    </Card>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+              </div>
 
-        <div className="fixed bottom-20 right-4 sm:hidden">
-          <Button size="lg" onClick={() => setShowBroadcastModal(true)} className="rounded-full w-14 h-14 shadow-lg">
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Pending Invites</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {pendingInvites.map((invite) => (
+                    <Card key={invite.id}>
+                      <CardContent className="p-4">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="font-mono text-sm bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                            {invite.code}
+                          </div>
+                          <Badge variant="outline" className="text-orange-600 border-orange-200">
+                            {invite.status}
+                          </Badge>
+                        </div>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-gray-600 dark:text-gray-400">Created:</span>
+                            <span>{invite.createdAt}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-600 dark:text-gray-400">Expires in:</span>
+                            <span className="text-orange-600">{invite.expiresAt}</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="reminders" className="mt-6 space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Create Reminder</CardTitle>
+                  <CardDescription>Set up reminders for rent, maintenance, or custom tasks</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleReminderSubmit} className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="reminder-type">Type *</Label>
+                        <Select
+                          value={reminderForm.type}
+                          onValueChange={(value) => setReminderForm({ ...reminderForm, type: value })}
+                        >
+                          <SelectTrigger className={reminderErrors.type ? "border-red-500" : ""}>
+                            <SelectValue placeholder="Select reminder type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Rent">Rent</SelectItem>
+                            <SelectItem value="Maintenance">Maintenance</SelectItem>
+                            <SelectItem value="Custom">Custom</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        {reminderErrors.type && <p className="text-sm text-red-500">{reminderErrors.type}</p>}
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="reminder-description">Description *</Label>
+                        <Input
+                          id="reminder-description"
+                          value={reminderForm.description}
+                          onChange={(e) => setReminderForm({ ...reminderForm, description: e.target.value })}
+                          placeholder="Enter reminder description"
+                          className={reminderErrors.description ? "border-red-500" : ""}
+                        />
+                        {reminderErrors.description && (
+                          <p className="text-sm text-red-500">{reminderErrors.description}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Schedule</Label>
+                      <RadioGroup
+                        value={reminderForm.scheduleType}
+                        onValueChange={(value) => setReminderForm({ ...reminderForm, scheduleType: value })}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="single" id="single" />
+                          <Label htmlFor="single">Single date</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="monthly" id="monthly" />
+                          <Label htmlFor="monthly">Monthly on specific day</Label>
+                        </div>
+                      </RadioGroup>
+
+                      {reminderForm.scheduleType === "single" && (
+                        <div className="space-y-2">
+                          <Input
+                            type="date"
+                            value={reminderForm.singleDate}
+                            onChange={(e) => setReminderForm({ ...reminderForm, singleDate: e.target.value })}
+                            className={reminderErrors.singleDate ? "border-red-500" : ""}
+                          />
+                          {reminderErrors.singleDate && (
+                            <p className="text-sm text-red-500">{reminderErrors.singleDate}</p>
+                          )}
+                        </div>
+                      )}
+
+                      {reminderForm.scheduleType === "monthly" && (
+                        <div className="space-y-2">
+                          <Select
+                            value={reminderForm.monthlyDay}
+                            onValueChange={(value) => setReminderForm({ ...reminderForm, monthlyDay: value })}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select day of month" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {Array.from({ length: 28 }, (_, i) => i + 1).map((day) => (
+                                <SelectItem key={day} value={day.toString()}>
+                                  Day {day}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label>Scope</Label>
+                      <RadioGroup
+                        value={reminderForm.scope}
+                        onValueChange={(value) =>
+                          setReminderForm({ ...reminderForm, scope: value, specificTenants: [] })
+                        }
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="all" id="all-tenants" />
+                          <Label htmlFor="all-tenants">All tenants of this property</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="specific" id="specific-tenants" />
+                          <Label htmlFor="specific-tenants">Specific tenants</Label>
+                        </div>
+                      </RadioGroup>
+
+                      {reminderForm.scope === "specific" && (
+                        <div className="space-y-2">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {dummyTenants.map((tenant) => (
+                              <div key={tenant.id} className="flex items-center space-x-2">
+                                <Checkbox
+                                  id={`tenant-${tenant.id}`}
+                                  checked={reminderForm.specificTenants.includes(tenant.id)}
+                                  onCheckedChange={() => handleTenantToggle(tenant.id)}
+                                />
+                                <Label htmlFor={`tenant-${tenant.id}`} className="text-sm">
+                                  {tenant.name}
+                                </Label>
+                              </div>
+                            ))}
+                          </div>
+                          {reminderErrors.specificTenants && (
+                            <p className="text-sm text-red-500">{reminderErrors.specificTenants}</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex justify-end">
+                      <Button type="submit">Create Reminder</Button>
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Upcoming Reminders</CardTitle>
+                  <CardDescription>View and manage your scheduled reminders</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {reminders.map((reminder) => (
+                      <div key={reminder.id} className="flex items-center justify-between p-4 border rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className="flex-shrink-0">
+                            <Badge
+                              variant="outline"
+                              className={
+                                reminder.type === "rent"
+                                  ? "bg-blue-50 text-blue-700 border-blue-200"
+                                  : reminder.type === "maintenance"
+                                    ? "bg-orange-50 text-orange-700 border-orange-200"
+                                    : "bg-gray-50 text-gray-700 border-gray-200"
+                              }
+                            >
+                              {reminder.type}
+                            </Badge>
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-medium">{reminder.description}</h4>
+                            <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mt-1">
+                              <span className="flex items-center gap-1">
+                                <CalendarIcon className="w-3 h-3" />
+                                {reminder.dueDate}
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <User className="w-3 h-3" />
+                                {reminder.scope}
+                              </span>
+                            </div>
+                          </div>
+                          <Badge
+                            variant="outline"
+                            className={
+                              reminder.priority === "high"
+                                ? "bg-red-50 text-red-700 border-red-200"
+                                : reminder.priority === "medium"
+                                  ? "bg-yellow-50 text-yellow-700 border-yellow-200"
+                                  : "bg-green-50 text-green-700 border-green-200"
+                            }
+                          >
+                            {reminder.priority}
+                          </Badge>
+                        </div>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm">
+                              <MoreVertical className="w-4 h-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem>
+                              <Edit className="w-4 h-4 mr-2" />
+                              Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <CheckCircle className="w-4 h-4 mr-2" />
+                              Mark Complete
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-red-600">
+                              <Trash2 className="w-4 h-4 mr-2" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+
+        <div className="fixed right-4 sm:hidden z-20" style={{ bottom: "calc(72px + env(safe-area-inset-bottom))" }}>
+          <Button
+            size="lg"
+            onClick={() => setShowBroadcastModal(true)}
+            className="rounded-full w-16 h-16 shadow-xl bg-blue-600 hover:bg-blue-700 border-4 border-white dark:border-gray-900"
+          >
             <Megaphone className="w-6 h-6" />
           </Button>
         </div>

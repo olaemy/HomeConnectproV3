@@ -39,6 +39,9 @@ import {
   User,
   CheckCircle,
   CalendarIcon,
+  ChevronRight,
+  Phone,
+  Mail,
 } from "lucide-react"
 
 // Dummy data
@@ -343,512 +346,536 @@ export function PropertyManagement() {
 
   return (
     <TooltipProvider>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-bold">Property Management</h1>
-            <p className="text-gray-600 dark:text-gray-400">Manage your properties and tenants</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  disabled={!isAgentApproved}
-                  onClick={() => setShowBroadcastModal(true)}
-                  className="hidden sm:flex items-center gap-2"
-                >
-                  <Megaphone className="w-4 h-4" />📢 Broadcast Message
-                </Button>
-              </TooltipTrigger>
-              {!isAgentApproved && (
-                <TooltipContent>
-                  <p>Available after verification</p>
-                </TooltipContent>
-              )}
-            </Tooltip>
-            <Button>
-              <Plus className="w-4 h-4 mr-2" />
-              Add New Property
-            </Button>
+      <div className="h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+        <div className="sticky top-0 z-10 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200/20 p-4 sm:p-6 flex-shrink-0">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h1 className="text-xl sm:text-2xl font-bold">Property Management</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Manage your properties and tenants</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    disabled={!isAgentApproved}
+                    onClick={() => setShowBroadcastModal(true)}
+                    className="hidden sm:flex items-center gap-2"
+                    size="sm"
+                  >
+                    <Megaphone className="w-4 h-4" />
+                    Broadcast
+                  </Button>
+                </TooltipTrigger>
+                {!isAgentApproved && (
+                  <TooltipContent>
+                    <p>Available after verification</p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+              <Button size="sm" className="flex-1 sm:flex-none">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Property
+              </Button>
+            </div>
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Properties</CardTitle>
-              <Building2 className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">12</div>
-              <p className="text-xs text-muted-foreground">+2 from last month</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Active Tenants</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">28</div>
-              <p className="text-xs text-muted-foreground">+4 from last month</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Monthly Revenue</CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">$52,400</div>
-              <p className="text-xs text-muted-foreground">+12% from last month</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Occupancy Rate</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">94%</div>
-              <p className="text-xs text-muted-foreground">+2% from last month</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="properties">Properties</TabsTrigger>
-            <TabsTrigger value="tenants">Tenants</TabsTrigger>
-            <TabsTrigger value="reminders">Reminders</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="properties" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Property cards would go here */}
-              <Card className="overflow-hidden">
-                <div className="aspect-video bg-gray-200 dark:bg-gray-800"></div>
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <CardTitle className="text-lg">Sunset Apartments</CardTitle>
-                      <CardDescription className="flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />
-                        Downtown, City Center
-                      </CardDescription>
-                    </div>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm">
-                          <MoreVertical className="w-4 h-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>
-                          <Edit className="w-4 h-4 mr-2" />
-                          Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="text-red-600">
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+        <div className="flex-1 overflow-hidden">
+          <div className="p-4 sm:p-6 space-y-6 h-full flex flex-col">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 flex-shrink-0">
+              <Card className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">Properties</p>
+                    <p className="text-lg sm:text-2xl font-bold">12</p>
+                    <p className="text-xs text-green-600">+2 this month</p>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400 mb-4">
-                    <span className="flex items-center gap-1">
-                      <Bed className="w-3 h-3" />
-                      2-3 bed
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Bath className="w-3 h-3" />
-                      1-2 bath
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Square className="w-3 h-3" />
-                      800-1200 sqft
-                    </span>
+                  <Building2 className="h-6 w-6 sm:h-8 sm:w-8 text-blue-500" />
+                </div>
+              </Card>
+              <Card className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">Tenants</p>
+                    <p className="text-lg sm:text-2xl font-bold">28</p>
+                    <p className="text-xs text-green-600">+4 this month</p>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div className="text-lg font-semibold">$1,800-2,400/mo</div>
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm">4.8</span>
-                    </div>
+                  <Users className="h-6 w-6 sm:h-8 sm:w-8 text-green-500" />
+                </div>
+              </Card>
+              <Card className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">Revenue</p>
+                    <p className="text-lg sm:text-2xl font-bold">$52.4k</p>
+                    <p className="text-xs text-green-600">+12% this month</p>
                   </div>
-                  <div className="flex items-center justify-between mt-4 text-sm">
-                    <span className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
-                      <Eye className="w-3 h-3" />
-                      124 views
-                    </span>
-                    <span className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
-                      <MessageSquare className="w-3 h-3" />8 inquiries
-                    </span>
+                  <DollarSign className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-500" />
+                </div>
+              </Card>
+              <Card className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">Occupancy</p>
+                    <p className="text-lg sm:text-2xl font-bold">94%</p>
+                    <p className="text-xs text-green-600">+2% this month</p>
                   </div>
-                </CardContent>
+                  <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-purple-500" />
+                </div>
               </Card>
             </div>
-          </TabsContent>
 
-          <TabsContent value="tenants" className="space-y-6">
-            {/* Active Tenants */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Active Tenants</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {activeTenants.map((tenant) => (
-                  <Card key={tenant.id}>
-                    <CardContent className="p-4">
-                      <div className="flex items-center gap-3 mb-3">
-                        <Avatar>
-                          <AvatarImage src={tenant.avatar || "/placeholder.svg"} alt={tenant.name} />
-                          <AvatarFallback>
-                            {tenant.name
-                              .split(" ")
-                              .map((n) => n[0])
-                              .join("")}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <h4 className="font-medium">{tenant.name}</h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">{tenant.unit}</p>
-                        </div>
-                        <Badge
-                          variant="secondary"
-                          className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                        >
-                          {tenant.status}
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+              <div className="sticky top-[120px] z-10 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm -mx-4 px-4 py-2 border-b border-gray-200/20 flex-shrink-0">
+                <TabsList className="grid w-full grid-cols-3 h-12">
+                  <TabsTrigger value="properties" className="text-xs sm:text-sm">
+                    Properties
+                  </TabsTrigger>
+                  <TabsTrigger value="tenants" className="text-xs sm:text-sm">
+                    Tenants
+                  </TabsTrigger>
+                  <TabsTrigger value="reminders" className="text-xs sm:text-sm">
+                    Reminders
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+
+              <TabsContent value="properties" className="flex-1 overflow-y-auto mt-6 pb-20">
+                <div className="space-y-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 sm:space-y-0">
+                  <Card className="overflow-hidden hover:shadow-lg transition-all duration-200 active:scale-[0.98] cursor-pointer">
+                    <div className="relative">
+                      <div className="aspect-[4/3] bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800"></div>
+                      <div className="absolute top-3 left-3 flex gap-2">
+                        <Badge className="bg-green-500 text-white text-xs">Active</Badge>
+                        <Badge variant="outline" className="bg-white/90 text-xs">
+                          Apartment
                         </Badge>
                       </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">Rent:</span>
-                          <span className="font-medium">${tenant.rentAmount}/mo</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">Lease:</span>
-                          <span>
-                            {tenant.leaseStart} - {tenant.leaseEnd}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="absolute top-3 right-3 h-8 w-8 bg-white/90 hover:bg-white"
+                      >
+                        <MoreVertical className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <div className="p-4 space-y-3">
+                      <div>
+                        <h3 className="font-semibold text-base sm:text-lg line-clamp-1">Sunset Apartments</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1">
+                          <MapPin className="w-3 h-3" />
+                          Downtown, City Center
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-3">
+                          <span className="flex items-center gap-1">
+                            <Bed className="w-3 h-3" />
+                            2-3
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Bath className="w-3 h-3" />
+                            1-2
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Square className="w-3 h-3" />
+                            800-1200
                           </span>
                         </div>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          <span className="font-medium">4.8</span>
+                        </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
 
-            {/* Pending Invites */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold">Pending Invites</h3>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button size="sm" disabled={!isAgentApproved} onClick={() => setShowInviteModal(true)}>
-                      <Plus className="w-4 h-4 mr-2" />
-                      Generate Invite Link
-                    </Button>
-                  </TooltipTrigger>
-                  {!isAgentApproved && (
-                    <TooltipContent>
-                      <p>Available after verification</p>
-                    </TooltipContent>
-                  )}
-                </Tooltip>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {pendingInvites.map((invite) => (
-                  <Card key={invite.id}>
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="font-mono text-sm bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
-                          {invite.code}
-                        </div>
-                        <Badge variant="outline" className="text-orange-600 border-orange-200">
-                          {invite.status}
-                        </Badge>
+                      <div className="flex items-center justify-between">
+                        <div className="text-lg font-bold text-green-600">$1,800-2,400/mo</div>
+                        <ChevronRight className="w-5 h-5 text-gray-400" />
                       </div>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">Created:</span>
-                          <span>{invite.createdAt}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600 dark:text-gray-400">Expires in:</span>
-                          <span className="text-orange-600">{invite.expiresAt}</span>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </TabsContent>
 
-          <TabsContent value="reminders" className="space-y-6">
-            {/* Create Reminder */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Create Reminder</CardTitle>
-                <CardDescription>Set up reminders for rent, maintenance, or custom tasks</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleReminderSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="reminder-type">Type *</Label>
-                      <Select
-                        value={reminderForm.type}
-                        onValueChange={(value) => setReminderForm({ ...reminderForm, type: value })}
-                        disabled={!isAgentApproved}
-                      >
-                        <SelectTrigger className={reminderErrors.type ? "border-red-500" : ""}>
-                          <SelectValue placeholder="Select reminder type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Rent">Rent</SelectItem>
-                          <SelectItem value="Maintenance">Maintenance</SelectItem>
-                          <SelectItem value="Custom">Custom</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      {reminderErrors.type && <p className="text-sm text-red-500">{reminderErrors.type}</p>}
+                      <div className="flex items-center justify-between text-xs text-gray-500 pt-2 border-t">
+                        <span className="flex items-center gap-1">
+                          <Eye className="w-3 h-3" />
+                          124 views
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <MessageSquare className="w-3 h-3" />8 inquiries
+                        </span>
+                      </div>
                     </div>
+                  </Card>
+                </div>
+              </TabsContent>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="reminder-description">Description *</Label>
-                      <Input
-                        id="reminder-description"
-                        value={reminderForm.description}
-                        onChange={(e) => setReminderForm({ ...reminderForm, description: e.target.value })}
-                        placeholder="Enter reminder description"
-                        className={reminderErrors.description ? "border-red-500" : ""}
-                        disabled={!isAgentApproved}
-                      />
-                      {reminderErrors.description && (
-                        <p className="text-sm text-red-500">{reminderErrors.description}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <Label>Schedule</Label>
-                    <RadioGroup
-                      value={reminderForm.scheduleType}
-                      onValueChange={(value) => setReminderForm({ ...reminderForm, scheduleType: value })}
-                      disabled={!isAgentApproved}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="single" id="single" />
-                        <Label htmlFor="single">Single date</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="monthly" id="monthly" />
-                        <Label htmlFor="monthly">Monthly on specific day</Label>
-                      </div>
-                    </RadioGroup>
-
-                    {reminderForm.scheduleType === "single" && (
-                      <div className="space-y-2">
-                        <Input
-                          type="date"
-                          value={reminderForm.singleDate}
-                          onChange={(e) => setReminderForm({ ...reminderForm, singleDate: e.target.value })}
-                          className={reminderErrors.singleDate ? "border-red-500" : ""}
-                          disabled={!isAgentApproved}
-                        />
-                        {reminderErrors.singleDate && (
-                          <p className="text-sm text-red-500">{reminderErrors.singleDate}</p>
-                        )}
-                      </div>
-                    )}
-
-                    {reminderForm.scheduleType === "monthly" && (
-                      <div className="space-y-2">
-                        <Select
-                          value={reminderForm.monthlyDay}
-                          onValueChange={(value) => setReminderForm({ ...reminderForm, monthlyDay: value })}
-                          disabled={!isAgentApproved}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select day of month" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {Array.from({ length: 28 }, (_, i) => i + 1).map((day) => (
-                              <SelectItem key={day} value={day.toString()}>
-                                Day {day}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="space-y-3">
-                    <Label>Scope</Label>
-                    <RadioGroup
-                      value={reminderForm.scope}
-                      onValueChange={(value) => setReminderForm({ ...reminderForm, scope: value, specificTenants: [] })}
-                      disabled={!isAgentApproved}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="all" id="all-tenants" />
-                        <Label htmlFor="all-tenants">All tenants of this property</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="specific" id="specific-tenants" />
-                        <Label htmlFor="specific-tenants">Specific tenants</Label>
-                      </div>
-                    </RadioGroup>
-
-                    {reminderForm.scope === "specific" && (
-                      <div className="space-y-2">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                          {dummyTenants.map((tenant) => (
-                            <div key={tenant.id} className="flex items-center space-x-2">
-                              <Checkbox
-                                id={`tenant-${tenant.id}`}
-                                checked={reminderForm.specificTenants.includes(tenant.id)}
-                                onCheckedChange={() => handleTenantToggle(tenant.id)}
-                                disabled={!isAgentApproved}
-                              />
-                              <Label htmlFor={`tenant-${tenant.id}`} className="text-sm">
-                                {tenant.name}
-                              </Label>
+              <TabsContent value="tenants" className="flex-1 overflow-y-auto mt-6 pb-20">
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Active Tenants</h3>
+                    <div className="space-y-3 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 sm:space-y-0">
+                      {activeTenants.map((tenant) => (
+                        <Card key={tenant.id} className="hover:shadow-md transition-shadow cursor-pointer">
+                          <div className="p-4">
+                            <div className="flex items-center gap-3 mb-4">
+                              <Avatar className="h-12 w-12">
+                                <AvatarImage src={tenant.avatar || "/placeholder.svg"} alt={tenant.name} />
+                                <AvatarFallback className="bg-blue-100 text-blue-600">
+                                  {tenant.name
+                                    .split(" ")
+                                    .map((n) => n[0])
+                                    .join("")}
+                                </AvatarFallback>
+                              </Avatar>
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-semibold truncate">{tenant.name}</h4>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">{tenant.unit}</p>
+                              </div>
+                              <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-xs">
+                                {tenant.status}
+                              </Badge>
                             </div>
-                          ))}
-                        </div>
-                        {reminderErrors.specificTenants && (
-                          <p className="text-sm text-red-500">{reminderErrors.specificTenants}</p>
+
+                            <div className="space-y-2">
+                              <div className="flex justify-between items-center">
+                                <span className="text-sm text-gray-600 dark:text-gray-400">Monthly Rent</span>
+                                <span className="font-semibold text-green-600">${tenant.rentAmount}</span>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span className="text-sm text-gray-600 dark:text-gray-400">Lease Period</span>
+                                <span className="text-sm">
+                                  {tenant.leaseStart} - {tenant.leaseEnd}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="flex gap-2 mt-4">
+                              <Button size="sm" variant="outline" className="flex-1 bg-transparent">
+                                <Phone className="w-3 h-3 mr-1" />
+                                Call
+                              </Button>
+                              <Button size="sm" variant="outline" className="flex-1 bg-transparent">
+                                <Mail className="w-3 h-3 mr-1" />
+                                Message
+                              </Button>
+                            </div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-semibold">Pending Invites</h3>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button size="sm" disabled={!isAgentApproved} onClick={() => setShowInviteModal(true)}>
+                            <Plus className="w-4 h-4 mr-2" />
+                            <span className="hidden sm:inline">Generate Invite</span>
+                            <span className="sm:hidden">Invite</span>
+                          </Button>
+                        </TooltipTrigger>
+                        {!isAgentApproved && (
+                          <TooltipContent>
+                            <p>Available after verification</p>
+                          </TooltipContent>
                         )}
-                      </div>
-                    )}
+                      </Tooltip>
+                    </div>
+                    <div className="space-y-3 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 sm:space-y-0">
+                      {pendingInvites.map((invite) => (
+                        <Card key={invite.id} className="hover:shadow-md transition-shadow">
+                          <div className="p-4">
+                            <div className="flex items-center justify-between mb-3">
+                              <div className="font-mono text-sm bg-gray-100 dark:bg-gray-800 px-3 py-1 rounded-md">
+                                {invite.code}
+                              </div>
+                              <Badge variant="outline" className="text-orange-600 border-orange-200 text-xs">
+                                {invite.status}
+                              </Badge>
+                            </div>
+                            <div className="space-y-2 text-sm">
+                              <div className="flex justify-between">
+                                <span className="text-gray-600 dark:text-gray-400">Created</span>
+                                <span>{invite.createdAt}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-gray-600 dark:text-gray-400">Expires in</span>
+                                <span className="text-orange-600 font-medium">{invite.expiresAt}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
                   </div>
+                </div>
+              </TabsContent>
 
-                  <div className="flex justify-end">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button type="submit" disabled={!isAgentApproved}>
-                          Create Reminder
-                        </Button>
-                      </TooltipTrigger>
-                      {!isAgentApproved && (
-                        <TooltipContent>
-                          <p>Available after verification</p>
-                        </TooltipContent>
-                      )}
-                    </Tooltip>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
+              <TabsContent value="reminders" className="flex-1 overflow-y-auto mt-6 pb-20">
+                <div className="space-y-6">
+                  {/* Create Reminder */}
+                  <Card className="flex-shrink-0">
+                    <CardHeader>
+                      <CardTitle>Create Reminder</CardTitle>
+                      <CardDescription>Set up reminders for rent, maintenance, or custom tasks</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <form onSubmit={handleReminderSubmit} className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="reminder-type">Type *</Label>
+                            <Select
+                              value={reminderForm.type}
+                              onValueChange={(value) => setReminderForm({ ...reminderForm, type: value })}
+                              disabled={!isAgentApproved}
+                            >
+                              <SelectTrigger className={reminderErrors.type ? "border-red-500" : ""}>
+                                <SelectValue placeholder="Select reminder type" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Rent">Rent</SelectItem>
+                                <SelectItem value="Maintenance">Maintenance</SelectItem>
+                                <SelectItem value="Custom">Custom</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            {reminderErrors.type && <p className="text-sm text-red-500">{reminderErrors.type}</p>}
+                          </div>
 
-            {/* Upcoming Reminders */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Upcoming Reminders</CardTitle>
-                <CardDescription>View and manage your scheduled reminders</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {reminders.map((reminder) => (
-                    <div key={reminder.id} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className="flex-shrink-0">
-                          <Badge
-                            variant="outline"
-                            className={
-                              reminder.type === "rent"
-                                ? "bg-blue-50 text-blue-700 border-blue-200"
-                                : reminder.type === "maintenance"
-                                  ? "bg-orange-50 text-orange-700 border-orange-200"
-                                  : "bg-gray-50 text-gray-700 border-gray-200"
-                            }
-                          >
-                            {reminder.type}
-                          </Badge>
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="font-medium">{reminder.description}</h4>
-                          <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mt-1">
-                            <span className="flex items-center gap-1">
-                              <CalendarIcon className="w-3 h-3" />
-                              {reminder.dueDate}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <User className="w-3 h-3" />
-                              {reminder.scope}
-                            </span>
+                          <div className="space-y-2">
+                            <Label htmlFor="reminder-description">Description *</Label>
+                            <Input
+                              id="reminder-description"
+                              value={reminderForm.description}
+                              onChange={(e) => setReminderForm({ ...reminderForm, description: e.target.value })}
+                              placeholder="Enter reminder description"
+                              className={reminderErrors.description ? "border-red-500" : ""}
+                              disabled={!isAgentApproved}
+                            />
+                            {reminderErrors.description && (
+                              <p className="text-sm text-red-500">{reminderErrors.description}</p>
+                            )}
                           </div>
                         </div>
-                        <Badge
-                          variant="outline"
-                          className={
-                            reminder.priority === "high"
-                              ? "bg-red-50 text-red-700 border-red-200"
-                              : reminder.priority === "medium"
-                                ? "bg-yellow-50 text-yellow-700 border-yellow-200"
-                                : "bg-green-50 text-green-700 border-green-200"
-                          }
-                        >
-                          {reminder.priority}
-                        </Badge>
-                      </div>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm">
-                            <MoreVertical className="w-4 h-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem>
-                            <Edit className="w-4 h-4 mr-2" />
-                            Edit
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <CheckCircle className="w-4 h-4 mr-2" />
-                            Mark Complete
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="text-red-600">
-                            <Trash2 className="w-4 h-4 mr-2" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
 
-        {/* Mobile FAB for Broadcast */}
-        <div className="fixed bottom-20 right-4 sm:hidden">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size="lg"
-                disabled={!isAgentApproved}
-                onClick={() => setShowBroadcastModal(true)}
-                className="rounded-full w-14 h-14 shadow-lg"
-              >
-                <Megaphone className="w-6 h-6" />
-              </Button>
-            </TooltipTrigger>
-            {!isAgentApproved && (
-              <TooltipContent>
-                <p>Available after verification</p>
-              </TooltipContent>
-            )}
-          </Tooltip>
+                        <div className="space-y-3">
+                          <Label>Schedule</Label>
+                          <RadioGroup
+                            value={reminderForm.scheduleType}
+                            onValueChange={(value) => setReminderForm({ ...reminderForm, scheduleType: value })}
+                            disabled={!isAgentApproved}
+                          >
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="single" id="single" />
+                              <Label htmlFor="single">Single date</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="monthly" id="monthly" />
+                              <Label htmlFor="monthly">Monthly on specific day</Label>
+                            </div>
+                          </RadioGroup>
+
+                          {reminderForm.scheduleType === "single" && (
+                            <div className="space-y-2">
+                              <Input
+                                type="date"
+                                value={reminderForm.singleDate}
+                                onChange={(e) => setReminderForm({ ...reminderForm, singleDate: e.target.value })}
+                                className={reminderErrors.singleDate ? "border-red-500" : ""}
+                                disabled={!isAgentApproved}
+                              />
+                              {reminderErrors.singleDate && (
+                                <p className="text-sm text-red-500">{reminderErrors.singleDate}</p>
+                              )}
+                            </div>
+                          )}
+
+                          {reminderForm.scheduleType === "monthly" && (
+                            <div className="space-y-2">
+                              <Select
+                                value={reminderForm.monthlyDay}
+                                onValueChange={(value) => setReminderForm({ ...reminderForm, monthlyDay: value })}
+                                disabled={!isAgentApproved}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select day of month" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {Array.from({ length: 28 }, (_, i) => i + 1).map((day) => (
+                                    <SelectItem key={day} value={day.toString()}>
+                                      Day {day}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="space-y-3">
+                          <Label>Scope</Label>
+                          <RadioGroup
+                            value={reminderForm.scope}
+                            onValueChange={(value) =>
+                              setReminderForm({ ...reminderForm, scope: value, specificTenants: [] })
+                            }
+                            disabled={!isAgentApproved}
+                          >
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="all" id="all-tenants" />
+                              <Label htmlFor="all-tenants">All tenants of this property</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <RadioGroupItem value="specific" id="specific-tenants" />
+                              <Label htmlFor="specific-tenants">Specific tenants</Label>
+                            </div>
+                          </RadioGroup>
+
+                          {reminderForm.scope === "specific" && (
+                            <div className="space-y-2">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                {dummyTenants.map((tenant) => (
+                                  <div key={tenant.id} className="flex items-center space-x-2">
+                                    <Checkbox
+                                      id={`tenant-${tenant.id}`}
+                                      checked={reminderForm.specificTenants.includes(tenant.id)}
+                                      onCheckedChange={() => handleTenantToggle(tenant.id)}
+                                      disabled={!isAgentApproved}
+                                    />
+                                    <Label htmlFor={`tenant-${tenant.id}`} className="text-sm">
+                                      {tenant.name}
+                                    </Label>
+                                  </div>
+                                ))}
+                              </div>
+                              {reminderErrors.specificTenants && (
+                                <p className="text-sm text-red-500">{reminderErrors.specificTenants}</p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="flex justify-end">
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button type="submit" disabled={!isAgentApproved}>
+                                Create Reminder
+                              </Button>
+                            </TooltipTrigger>
+                            {!isAgentApproved && (
+                              <TooltipContent>
+                                <p>Available after verification</p>
+                              </TooltipContent>
+                            )}
+                          </Tooltip>
+                        </div>
+                      </form>
+                    </CardContent>
+                  </Card>
+
+                  {/* Upcoming Reminders */}
+                  <Card className="flex-shrink-0">
+                    <CardHeader>
+                      <CardTitle>Upcoming Reminders</CardTitle>
+                      <CardDescription>View and manage your scheduled reminders</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4 max-h-96 overflow-y-auto">
+                        {reminders.map((reminder) => (
+                          <div key={reminder.id} className="flex items-center justify-between p-4 border rounded-lg">
+                            <div className="flex items-center gap-3">
+                              <div className="flex-shrink-0">
+                                <Badge
+                                  variant="outline"
+                                  className={
+                                    reminder.type === "rent"
+                                      ? "bg-blue-50 text-blue-700 border-blue-200"
+                                      : reminder.type === "maintenance"
+                                        ? "bg-orange-50 text-orange-700 border-orange-200"
+                                        : "bg-gray-50 text-gray-700 border-gray-200"
+                                  }
+                                >
+                                  {reminder.type}
+                                </Badge>
+                              </div>
+                              <div className="flex-1">
+                                <h4 className="font-medium">{reminder.description}</h4>
+                                <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                  <span className="flex items-center gap-1">
+                                    <CalendarIcon className="w-3 h-3" />
+                                    {reminder.dueDate}
+                                  </span>
+                                  <span className="flex items-center gap-1">
+                                    <User className="w-3 h-3" />
+                                    {reminder.scope}
+                                  </span>
+                                </div>
+                              </div>
+                              <Badge
+                                variant="outline"
+                                className={
+                                  reminder.priority === "high"
+                                    ? "bg-red-50 text-red-700 border-red-200"
+                                    : reminder.priority === "medium"
+                                      ? "bg-yellow-50 text-yellow-700 border-yellow-200"
+                                      : "bg-green-50 text-green-700 border-green-200"
+                                }
+                              >
+                                {reminder.priority}
+                              </Badge>
+                            </div>
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="sm">
+                                  <MoreVertical className="w-4 h-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem>
+                                  <Edit className="w-4 h-4 mr-2" />
+                                  Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <CheckCircle className="w-4 h-4 mr-2" />
+                                  Mark Complete
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="text-red-600">
+                                  <Trash2 className="w-4 h-4 mr-2" />
+                                  Delete
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+            </Tabs>
+
+            <div className="fixed bottom-24 right-4 sm:hidden z-20">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="lg"
+                    disabled={!isAgentApproved}
+                    onClick={() => setShowBroadcastModal(true)}
+                    className="rounded-full w-16 h-16 shadow-xl bg-blue-600 hover:bg-blue-700 border-4 border-white dark:border-gray-900"
+                  >
+                    <Megaphone className="w-6 h-6" />
+                  </Button>
+                </TooltipTrigger>
+                {!isAgentApproved && (
+                  <TooltipContent>
+                    <p>Available after verification</p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </div>
+          </div>
         </div>
 
-        {/* Broadcast Dialog */}
         <Dialog open={showBroadcastModal} onOpenChange={setShowBroadcastModal}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
@@ -869,7 +896,6 @@ export function PropertyManagement() {
           </DialogContent>
         </Dialog>
 
-        {/* Invite Dialog */}
         <Dialog open={showInviteModal} onOpenChange={setShowInviteModal}>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
